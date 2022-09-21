@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-condition-complie",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "vite plugin for complie code with condition",
   "main": "dist/vite-plugin-condition-complie.js",
   "module": "dist/vite-plugin-condition-complie.mjs",

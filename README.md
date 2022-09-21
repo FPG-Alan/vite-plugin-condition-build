@@ -1,26 +1,51 @@
-# ts lib starter
+# vite-plugin-condition-build
 
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
+A vite plugin that remove codes according env variable druing build.
 
-A library starter template use Typescript and Rollup, inspired by [The best Rollup config for TypeScript libraries](https://gist.github.com/aleclarson/9900ed2a9a3119d865286b218e14d226)
+## When to use
 
-# Feature
+When you want to build your code into multiple versions and add or remove some specific code between versions
 
-- Bundle by `Rollup`, use `Esbuild` as TS compilers and minifier [rollup-plugin-esbuild](https://github.com/egoist/rollup-plugin-esbuild#rollup-plugin-esbuild)
-- Automaticlly `.d.ts` definition files by dts plugin [rollup-plugin-dts](https://github.com/Swatinem/rollup-plugin-dts)
-- Example page powered by Vite, out of box
-- use PNPM as package manager
-- Use Jest as test framefork
-- Commitizen friendly
-
-# Usage
-
-1. install
+## Install
 
 ```
-pnpm dlx degit --force https://github.com/FPG-Alan/ts-lib-starter
+pnpm install vite-plugin-condition-build
 ```
 
-2. modify value of `[name/main/module/typings]` in package.json with your lib name
+## Usage
 
-3. modify value of dep in example's package.json
+First you need to configure the `VITE_SERVE_KIND` field in the env file, the specific value is up to you. Like this:
+
+```
+VITE_SERVE_KIND=manage
+```
+
+Next in the code use block comments to circle the code that only needs to appear under a certain SERVER_KIND:
+
+```js
+// some code
+const a = 1;
+// ...
+// #if (SERVE_KIND == "console")
+const foo = "bar";
+// #endif
+// ...
+const b = 2;
+// #if (SERVE_KIND == "manage")
+const bar = "foo";
+// #endif
+// other code
+```
+
+Finally, the code you build will looks like this:
+
+```js
+// some code
+const a = 1;
+// ...
+const b = 2;
+// #if (SERVE_KIND == "manage")
+const bar = "foo";
+// #endif
+// other code
+```
