@@ -49,3 +49,70 @@ const bar = "foo";
 // #endif
 // other code
 ```
+
+beside "==", you can use "!=" in the comment:
+
+```js
+// some code
+const a = 1;
+// ...
+// #if (SERVE_KIND != "console")
+const foo = "bar";
+// #endif
+// ...
+const b = 2;
+// #if (SERVE_KIND != "manage")
+const bar = "foo";
+// #endif
+// other code
+```
+
+and then the output will be:
+
+```js
+// some code
+const a = 1;
+// ...
+// #if (SERVE_KIND != "console")
+const foo = "bar";
+// #endif
+// ...
+const b = 2;
+// other code
+```
+
+### Wildcard
+
+You can even use "\*" in comment as wildcard:
+
+```env
+VITE_SERVE_KIND=console.lite
+```
+
+```js
+// some code
+const a = 1;
+// ...
+// #if (SERVE_KIND == "console.*")
+const foo = "bar";
+// #endif
+// ...
+const b = 2;
+// #if (SERVE_KIND == "manage")
+const bar = "foo";
+// #endif
+// other code
+```
+
+output:
+
+```js
+// some code
+const a = 1;
+// ...
+const b = 2;
+// #if (SERVE_KIND == "console.*")
+const bar = "foo";
+// #endif
+// other code
+```

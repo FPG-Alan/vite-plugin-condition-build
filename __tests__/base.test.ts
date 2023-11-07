@@ -1,17 +1,7 @@
 import conditionBuild from "../src";
+import { slash } from "../src/utils";
+
 const path = require("path");
-
-function slash(path: string) {
-  const isExtendedLengthPath = /^\\\\\?\\/.test(path);
-  // eslint-disable-next-line no-control-regex
-  const hasNonAscii = /[^\u0000-\u0080]+/.test(path);
-
-  if (isExtendedLengthPath || hasNonAscii) {
-    return path;
-  }
-
-  return path.replace(/\\/g, "/");
-}
 
 describe("index", () => {
   const plugin = conditionBuild();
@@ -229,11 +219,10 @@ describe("index", () => {
     const id = `${slash(path.resolve("./src"))}/test.ts`;
     plugin.configResolved({ env: { VITE_SERVE_KIND: "console" } });
     const result = plugin.transform(code, id)?.code;
-    console.log(result);
     expect(result?.replace(/[\r\n]|\s/g, "")).toBe(
       `
       // #if (SERVE_KIND == "console")
-      console.log("user "); 
+      console.log("user ");
       // #endif
       aa
       `.replace(/[\r\n]|\s/g, "")
